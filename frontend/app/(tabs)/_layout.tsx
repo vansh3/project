@@ -1,10 +1,13 @@
 import { Tabs } from "expo-router";
 import Ionicons from "@react-native-vector-icons/ionicons";
 import { useTheme } from "@/src/theme";
+import { useAppMode } from "@/src/mode";
 import { Platform } from "react-native";
 
 export default function TabsLayout() {
   const { colors } = useTheme();
+  const { mode } = useAppMode();
+  const kidsMode = mode === "kids";
   return (
     <Tabs
       screenOptions={{
@@ -32,6 +35,8 @@ export default function TabsLayout() {
         options={{
           title: "Videos",
           tabBarIcon: ({ color, size }) => <Ionicons name="play-circle" size={size} color={color} />,
+          // Hidden while a kid is using Kids Mode — protects parent-only content.
+          href: kidsMode ? null : undefined,
         }}
       />
       <Tabs.Screen
@@ -46,6 +51,8 @@ export default function TabsLayout() {
         options={{
           title: "Profile",
           tabBarIcon: ({ color, size }) => <Ionicons name="person-circle" size={size} color={color} />,
+          // Hidden while a kid is using Kids Mode — protects admin/payment settings.
+          href: kidsMode ? null : undefined,
         }}
       />
     </Tabs>

@@ -6,12 +6,25 @@ import Ionicons from "@react-native-vector-icons/ionicons";
 import { useAuth } from "@/src/auth";
 import { useTheme, spacing, radius } from "@/src/theme";
 import { Button } from "@/src/components/Button";
+import { useAppMode } from "@/src/mode";
 
 export default function Profile() {
   const { user, signOut } = useAuth();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { colors } = useTheme();
+  const { mode, requestParentAccess } = useAppMode();
+
+  if (mode === "kids") {
+    return (
+      <View style={[styles.lockedWrap, { backgroundColor: colors.surface, paddingTop: insets.top }]} testID="profile-locked-kids-mode">
+        <Ionicons name="lock-closed" size={48} color={colors.muted} />
+        <Text style={[styles.title, { color: colors.onSurface, fontSize: 20, marginTop: spacing.lg, marginBottom: spacing.sm }]}>Ask a parent</Text>
+        <Text style={{ color: colors.onSurfaceTertiary, textAlign: "center", marginBottom: spacing.xl }}>Profile is only available in Parent Mode.</Text>
+        <Button testID="profile-locked-exit-button" title="Switch to Parent Mode" onPress={() => requestParentAccess()} />
+      </View>
+    );
+  }
 
   return (
     <ScrollView
@@ -89,6 +102,7 @@ export default function Profile() {
 }
 
 const styles = StyleSheet.create({
+  lockedWrap: { flex: 1, alignItems: "center", justifyContent: "center", padding: spacing.xl },
   title: { fontSize: 28, fontWeight: "800", marginBottom: spacing.xl },
   userCard: { flexDirection: "row", alignItems: "center", padding: spacing.lg, borderRadius: radius.lg, borderWidth: 1, marginBottom: spacing.lg },
   avatar: { width: 64, height: 64, borderRadius: 32, alignItems: "center", justifyContent: "center" },

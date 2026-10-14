@@ -107,6 +107,116 @@ class GameProgress(BaseModel):
     completed: bool = False
 
 
+# ---------- Mood Match question bank (seeded once; served via /games/mood-questions) ----------
+MOOD_QUESTION_BANK = [
+    # Happy (20)
+    {"situation": "Your friend shared their toy with you.", "answer": "Happy"},
+    {"situation": "You finished your puzzle all by yourself.", "answer": "Happy"},
+    {"situation": "You got a gold star for good work.", "answer": "Happy"},
+    {"situation": "Your best friend invited you to their party.", "answer": "Happy"},
+    {"situation": "You found your missing teddy bear.", "answer": "Happy"},
+    {"situation": "Mom said yes to extra playtime.", "answer": "Happy"},
+    {"situation": "You learned to ride your bike without help.", "answer": "Happy"},
+    {"situation": "Your team won the game.", "answer": "Happy"},
+    {"situation": "You got to eat your favorite ice cream.", "answer": "Happy"},
+    {"situation": "You made a new friend at the park.", "answer": "Happy"},
+    {"situation": "Your drawing got put on the fridge.", "answer": "Happy"},
+    {"situation": "You got a big hug from someone you love.", "answer": "Happy"},
+    {"situation": "It's your birthday today!", "answer": "Happy"},
+    {"situation": "You helped a friend and they said thank you.", "answer": "Happy"},
+    {"situation": "You got picked first for the team.", "answer": "Happy"},
+    {"situation": "The sun is shining and you're going to the beach.", "answer": "Happy"},
+    {"situation": "Your favorite song came on the radio.", "answer": "Happy"},
+    {"situation": "You got a new puppy.", "answer": "Happy"},
+    {"situation": "Grandma is coming to visit today.", "answer": "Happy"},
+    {"situation": "You did a great job on your spelling test.", "answer": "Happy"},
+    # Sad (20)
+    {"situation": "Your ice cream fell on the ground.", "answer": "Sad"},
+    {"situation": "Your favorite toy broke.", "answer": "Sad"},
+    {"situation": "Your best friend moved to a new city.", "answer": "Sad"},
+    {"situation": "You lost your favorite stuffed animal.", "answer": "Sad"},
+    {"situation": "Nobody wanted to play with you at recess.", "answer": "Sad"},
+    {"situation": "Your drawing got ripped by accident.", "answer": "Sad"},
+    {"situation": "Your pet is not feeling well.", "answer": "Sad"},
+    {"situation": "You didn't get invited to the party.", "answer": "Sad"},
+    {"situation": "You missed the school bus.", "answer": "Sad"},
+    {"situation": "It rained on the day of the picnic.", "answer": "Sad"},
+    {"situation": "Your balloon flew away.", "answer": "Sad"},
+    {"situation": "You dropped your lunch tray in the cafeteria.", "answer": "Sad"},
+    {"situation": "Your team lost the game.", "answer": "Sad"},
+    {"situation": "You said goodbye to a good friend.", "answer": "Sad"},
+    {"situation": "Your sandcastle got washed away by the waves.", "answer": "Sad"},
+    {"situation": "You couldn't find your favorite book.", "answer": "Sad"},
+    {"situation": "Your plant wilted even though you watered it.", "answer": "Sad"},
+    {"situation": "You weren't able to go to the fun fair.", "answer": "Sad"},
+    {"situation": "Your friend forgot your birthday.", "answer": "Sad"},
+    {"situation": "You got left out of a game at recess.", "answer": "Sad"},
+    # Angry (20)
+    {"situation": "Someone took your turn on the swing.", "answer": "Angry"},
+    {"situation": "Your little brother broke your toy on purpose.", "answer": "Angry"},
+    {"situation": "Someone cut in front of you in line.", "answer": "Angry"},
+    {"situation": "Your sibling changed the TV channel without asking.", "answer": "Angry"},
+    {"situation": "Someone laughed at your drawing.", "answer": "Angry"},
+    {"situation": "Your friend broke a promise to you.", "answer": "Angry"},
+    {"situation": "Someone took your snack without asking.", "answer": "Angry"},
+    {"situation": "You got blamed for something you didn't do.", "answer": "Angry"},
+    {"situation": "Your tower of blocks got knocked down on purpose.", "answer": "Angry"},
+    {"situation": "Someone called you a mean name.", "answer": "Angry"},
+    {"situation": "Your sister read your diary.", "answer": "Angry"},
+    {"situation": "Someone copied your homework without asking.", "answer": "Angry"},
+    {"situation": "You were told \"no\" to something you really wanted.", "answer": "Angry"},
+    {"situation": "Your friend wouldn't share the game controller.", "answer": "Angry"},
+    {"situation": "Someone messed up the bed you just made.", "answer": "Angry"},
+    {"situation": "You were interrupted while telling a story.", "answer": "Angry"},
+    {"situation": "Someone took credit for your idea.", "answer": "Angry"},
+    {"situation": "Your sibling ate the last cookie you were saving.", "answer": "Angry"},
+    {"situation": "Someone pushed in front of you at the water fountain.", "answer": "Angry"},
+    {"situation": "Your friend wouldn't give your toy back.", "answer": "Angry"},
+    # Scared (20)
+    {"situation": "There is loud thunder at night.", "answer": "Scared"},
+    {"situation": "You see a big spider in your room.", "answer": "Scared"},
+    {"situation": "The lights went out suddenly.", "answer": "Scared"},
+    {"situation": "You heard a strange noise under your bed.", "answer": "Scared"},
+    {"situation": "You're about to go to the doctor for a shot.", "answer": "Scared"},
+    {"situation": "You got lost in a big store for a minute.", "answer": "Scared"},
+    {"situation": "A dog you don't know is barking loudly at you.", "answer": "Scared"},
+    {"situation": "You have to give a speech in front of the class.", "answer": "Scared"},
+    {"situation": "You're going down a really tall slide for the first time.", "answer": "Scared"},
+    {"situation": "You watched a scary movie right before bed.", "answer": "Scared"},
+    {"situation": "The power went out during a storm.", "answer": "Scared"},
+    {"situation": "You're starting at a brand new school tomorrow.", "answer": "Scared"},
+    {"situation": "You heard a loud crash in the kitchen.", "answer": "Scared"},
+    {"situation": "You're swimming in deep water for the first time.", "answer": "Scared"},
+    {"situation": "Someone told a scary story around a campfire.", "answer": "Scared"},
+    {"situation": "You're home alone and hear a creaky noise.", "answer": "Scared"},
+    {"situation": "The roller coaster is about to start.", "answer": "Scared"},
+    {"situation": "You see a shadow that looks like a monster.", "answer": "Scared"},
+    {"situation": "You have to sleep in a dark room by yourself.", "answer": "Scared"},
+    {"situation": "A big wave is coming toward you at the beach.", "answer": "Scared"},
+    # Surprised (20)
+    {"situation": "You got a surprise birthday gift!", "answer": "Surprised"},
+    {"situation": "Your friends threw you a surprise party.", "answer": "Surprised"},
+    {"situation": "You found money in your old jacket pocket.", "answer": "Surprised"},
+    {"situation": "Your favorite show had an unexpected ending.", "answer": "Surprised"},
+    {"situation": "Your parents brought home a new puppy.", "answer": "Surprised"},
+    {"situation": "You opened your lunchbox and found a special treat.", "answer": "Surprised"},
+    {"situation": "Your teacher announced a surprise field trip.", "answer": "Surprised"},
+    {"situation": "Your cousin showed up at your door unannounced.", "answer": "Surprised"},
+    {"situation": "You won a prize you didn't expect.", "answer": "Surprised"},
+    {"situation": "Your friend did a magic trick that fooled you.", "answer": "Surprised"},
+    {"situation": "You found a hidden room at your grandparents' house.", "answer": "Surprised"},
+    {"situation": "Your plant grew a flower overnight.", "answer": "Surprised"},
+    {"situation": "Someone jumped out and said \"boo\" playfully.", "answer": "Surprised"},
+    {"situation": "You got an extra scoop of ice cream for free.", "answer": "Surprised"},
+    {"situation": "The ending of the book had a big twist.", "answer": "Surprised"},
+    {"situation": "Your parents said you're going on a surprise vacation.", "answer": "Surprised"},
+    {"situation": "A balloon popped with confetti inside.", "answer": "Surprised"},
+    {"situation": "You found a note hidden in your backpack from a friend.", "answer": "Surprised"},
+    {"situation": "Your favorite singer showed up on TV unexpectedly.", "answer": "Surprised"},
+    {"situation": "It started snowing in the middle of summer!", "answer": "Surprised"},
+]
+
+
 # ---------- Helpers ----------
 def hash_password(pw: str) -> str:
     return bcrypt.hashpw(pw.encode(), bcrypt.gensalt()).decode()
@@ -274,6 +384,11 @@ async def startup():
              "created_at": datetime.now(timezone.utc)},
         ]
         await db.videos.insert_many(demo)
+
+    # Seed mood-match question bank (~100 scenarios across 5 feelings) if empty
+    if await db.mood_questions.count_documents({}) == 0:
+        await db.mood_questions.insert_many([{"id": f"mq_{uuid.uuid4().hex[:10]}", **q} for q in MOOD_QUESTION_BANK])
+        logger.info(f"Seeded {len(MOOD_QUESTION_BANK)} mood-match questions")
 
 
 # ---------- Auth routes ----------
@@ -488,6 +603,16 @@ async def get_progress(user: dict = Depends(get_current_user)):
         if isinstance(it.get("updated_at"), datetime):
             it["updated_at"] = it["updated_at"].isoformat()
     return {"progress": items}
+
+
+@api_router.get("/games/mood-questions")
+async def get_mood_questions(count: int = 10, user: dict = Depends(get_current_user)):
+    count = max(1, min(count, 50))
+    items = await db.mood_questions.aggregate([
+        {"$sample": {"size": count}},
+        {"$project": {"_id": 0, "situation": 1, "answer": 1}},
+    ]).to_list(count)
+    return {"questions": items}
 
 
 # ---------- Razorpay subscriptions ----------

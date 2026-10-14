@@ -8,21 +8,78 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "@/src/auth";
 import { useTheme, spacing, radius } from "@/src/theme";
 import { apiFetch } from "@/src/api";
+import { useAppMode } from "@/src/mode";
+
+function ModeSwitch() {
+  const { colors } = useTheme();
+  const { mode, enterKidsMode, requestParentAccess } = useAppMode();
+  return (
+    <View style={[styles.modeSwitch, { backgroundColor: colors.surfaceTertiary }]} testID="mode-switch">
+      <Pressable
+        testID="mode-switch-parent"
+        onPress={() => mode !== "parent" && requestParentAccess()}
+        style={[styles.modePill, mode === "parent" && { backgroundColor: colors.brandTertiary }]}
+      >
+        <Ionicons name="person" size={14} color={mode === "parent" ? colors.onBrandTertiary : colors.muted} />
+        <Text style={{ color: mode === "parent" ? colors.onBrandTertiary : colors.muted, fontWeight: "800", fontSize: 12, marginLeft: 6 }}>Parent</Text>
+      </Pressable>
+      <Pressable
+        testID="mode-switch-kids"
+        onPress={() => mode !== "kids" && enterKidsMode()}
+        style={[styles.modePill, mode === "kids" && { backgroundColor: colors.kidPink }]}
+      >
+        <Ionicons name="happy" size={14} color={mode === "kids" ? colors.onKid : colors.muted} />
+        <Text style={{ color: mode === "kids" ? colors.onKid : colors.muted, fontWeight: "800", fontSize: 12, marginLeft: 6 }}>Kids</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+function KidsHome() {
+  const router = useRouter();
+  const insets = useSafeAreaInsets();
+  const { colors } = useTheme();
+  const { requestParentAccess } = useAppMode();
+
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.kidSky }} testID="kids-home-screen">
+      <View style={{ paddingTop: insets.top + spacing.md, paddingHorizontal: spacing.xl, flexDirection: "row", justifyContent: "flex-end" }}>
+        <Pressable testID="kids-exit-button" onPress={() => requestParentAccess()} style={[styles.exitChip, { backgroundColor: "rgba(255,255,255,0.3)" }]}>
+          <Ionicons name="lock-closed" size={14} color={colors.onKid} />
+          <Text style={{ color: colors.onKid, fontWeight: "800", fontSize: 12, marginLeft: 6 }}>Parent</Text>
+        </Pressable>
+      </View>
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: spacing.xl }}>
+        <Text style={styles.kidsWave}>👋</Text>
+        <Text style={[styles.kidsTitle, { color: colors.onKid }]}>Ready to play?</Text>
+        <Text style={[styles.kidsSub, { color: colors.onKid }]}>Pick a colorful game and have fun!</Text>
+        <Pressable testID="kids-home-play-button" onPress={() => router.push("/(tabs)/games")} style={[styles.kidsPlayBtn, { backgroundColor: colors.kidSun }]}>
+          <Ionicons name="play-circle" size={28} color={colors.onKidLight} />
+          <Text style={{ color: colors.onKidLight, fontWeight: "900", fontSize: 18, marginLeft: spacing.sm }}>Play Games</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+}
 
 export default function Home() {
   const { user } = useAuth();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { colors } = useTheme();
+  const { mode } = useAppMode();
 
   const { data, refetch, isRefetching } = useQuery({
     queryKey: ["videos-home"],
     queryFn: () => apiFetch("/videos"),
+    enabled: mode === "parent",
   });
 
   const videos = data?.videos || [];
   const featured = videos[0];
   const rest = videos.slice(1);
+
+  if (mode === "kids") return <KidsHome />;
 
   return (
     <ScrollView
@@ -48,6 +105,10 @@ export default function Home() {
             <Text style={{ color: colors.onBrandSecondary, fontWeight: "700", marginLeft: 6 }}>Go Premium</Text>
           </Pressable>
         ) : null}
+      </View>
+
+      <View style={{ paddingHorizontal: spacing.xl, marginBottom: spacing.lg }}>
+        <ModeSwitch />
       </View>
 
       {/* Featured card */}
@@ -93,7 +154,7 @@ export default function Home() {
         <Pressable testID="home-games-shortcut" onPress={() => router.push("/(tabs)/games")} style={[styles.quickCard, { backgroundColor: colors.brandPrimary }]}>
           <Ionicons name="game-controller" size={32} color={colors.onBrandPrimary} />
           <Text style={[styles.quickTitle, { color: colors.onBrandPrimary }]}>Kids Games</Text>
-          <Text style={[styles.quickSub, { color: colors.onBrandPrimary }]}>9 fun activities</Text>
+          <Text style={[styles.quickSub, { color: colors.onBrandPrimary }]}>12 fun activities</Text>
         </Pressable>
         <Pressable testID="home-videos-shortcut" onPress={() => router.push("/(tabs)/videos")} style={[styles.quickCard, { backgroundColor: colors.brandTertiary }]}>
           <Ionicons name="videocam" size={32} color={colors.onBrandTertiary} />
@@ -136,6 +197,13 @@ const styles = StyleSheet.create({
   name: { fontSize: 24, fontWeight: "800", marginTop: 2 },
   adminChip: { paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderRadius: radius.pill, flexDirection: "row", alignItems: "center" },
   premiumChip: { paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderRadius: radius.pill, flexDirection: "row", alignItems: "center" },
+  modeSwitch: { flexDirection: "row", borderRadius: radius.pill, padding: 4, gap: 4 },
+  modePill: { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center", paddingVertical: spacing.sm, borderRadius: radius.pill },
+  exitChip: { flexDirection: "row", alignItems: "center", paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderRadius: radius.pill },
+  kidsWave: { fontSize: 56 },
+  kidsTitle: { fontSize: 28, fontWeight: "900", marginTop: spacing.md, textAlign: "center" },
+  kidsSub: { fontSize: 15, marginTop: spacing.sm, textAlign: "center", opacity: 0.95 },
+  kidsPlayBtn: { flexDirection: "row", alignItems: "center", paddingHorizontal: spacing.xl, paddingVertical: spacing.lg, borderRadius: radius.pill, marginTop: spacing.xl },
   featured: { height: 220, borderRadius: radius.lg, overflow: "hidden", marginBottom: spacing.xl },
   featuredImg: { ...StyleSheet.absoluteFill, width: "100%", height: "100%" },
   scrim: { ...StyleSheet.absoluteFill },

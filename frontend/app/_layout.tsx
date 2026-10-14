@@ -10,6 +10,8 @@ import { queryClient } from "@/src/query-client";
 import { AuthProvider, useAuth } from "@/src/auth";
 import { useTheme } from "@/src/theme";
 import { initializeRevenueCat, SubscriptionProvider } from "@/lib/revenuecat";
+import { ModeProvider } from "@/src/mode";
+import { ParentalGate } from "@/src/components/ParentalGate";
 
 LogBox.ignoreAllLogs(true);
 
@@ -66,9 +68,12 @@ export default function RootLayout() {
           <KeyboardProvider>
             <AuthProvider>
               <SubscriptionProvider>
-                <AuthGate>
-                  <Stack screenOptions={{ headerShown: false, animation: "slide_from_right" }} />
-                </AuthGate>
+                <ModeProvider>
+                  <AuthGate>
+                    <Stack screenOptions={{ headerShown: false, animation: "slide_from_right" }} />
+                  </AuthGate>
+                  <ParentalGate />
+                </ModeProvider>
               </SubscriptionProvider>
             </AuthProvider>
           </KeyboardProvider>

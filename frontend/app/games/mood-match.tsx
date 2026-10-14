@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, ActivityIndicator } from "react-native";
 import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import * as Haptics from "expo-haptics";
 import Ionicons from "@react-native-vector-icons/ionicons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -9,8 +10,10 @@ import { GameMedal } from "@/src/components/GameMedal";
 import { useTheme, spacing, radius } from "@/src/theme";
 import { Button } from "@/src/components/Button";
 import { saveProgress } from "@/src/progress";
+import { apiFetch } from "@/src/api";
 
-const ROUNDS = [
+// Fallback used only if the ~100-question bank in the DB can't be reached.
+const FALLBACK_ROUNDS = [
   { situation: "Your friend shared their toy with you.", answer: "Happy" },
   { situation: "Your ice cream fell on the ground.", answer: "Sad" },
   { situation: "Someone took your turn on the swing.", answer: "Angry" },
@@ -33,14 +36,22 @@ export default function MoodMatch() {
   const [i, setI] = useState(0);
   const [score, setScore] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
+  const [round, setRound] = useState(0); // bumps on replay to force a fresh random set
+
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["mood-questions", round],
+    queryFn: () => apiFetch("/games/mood-questions?count=10"),
+  });
+  const ROUNDS = data?.questions?.length ? data.questions : FALLBACK_ROUNDS;
+
   const done = i >= ROUNDS.length;
-  const round = ROUNDS[i];
+  const current = ROUNDS[i];
   const options = useMemo(() => FEELINGS, []);
 
   const pick = (name: string) => {
-    if (picked) return;
+    if (picked || !current) return;
     setPicked(name);
-    const ok = name === round.answer;
+    const ok = name === current.answer;
     Haptics.notificationAsync(ok ? Haptics.NotificationFeedbackType.Success : Haptics.NotificationFeedbackType.Warning).catch(() => {});
     if (ok) setScore((s) => s + 1);
     setTimeout(() => {
@@ -51,29 +62,41 @@ export default function MoodMatch() {
     }, 900);
   };
 
+  const replay = () => {
+    setI(0);
+    setScore(0);
+    setPicked(null);
+    setRound((r) => r + 1); // fetches a brand-new random set of 10 from the ~100-question bank
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
       <GameHeader title="Mood Match" score={score} color={colors.kidCoral} />
-      {done ? (
+      {isLoading && !data ? (
+        <View style={styles.center}>
+          <ActivityIndicator size="large" color={colors.brandPrimary} />
+          <Text style={{ color: colors.muted, marginTop: spacing.md }}>Loading questions…</Text>
+        </View>
+      ) : done ? (
         <View style={[styles.center, { paddingBottom: insets.bottom + spacing.xl }]}>
           <GameMedal />
           <Text testID="mood-match-result" style={[styles.big, { color: colors.onSurface }]}>{score} / {ROUNDS.length}</Text>
           <Text style={[styles.msg, { color: colors.onSurfaceTertiary }]}>Great job reading feelings!</Text>
           <View style={{ width: "100%", marginTop: spacing.xl }}>
-            <Button testID="mood-match-replay" title="Play Again" onPress={() => { setI(0); setScore(0); }} />
+            <Button testID="mood-match-replay" title="Play Again" onPress={replay} />
           </View>
         </View>
       ) : (
         <View style={{ flex: 1, padding: spacing.xl }}>
           <Text style={[styles.progress, { color: colors.muted }]}>Question {i + 1} of {ROUNDS.length}</Text>
           <View style={[styles.situation, { backgroundColor: colors.kidSky }]}>
-            <Text testID="mood-match-situation" style={[styles.sitText, { color: colors.onKid }]}>{round.situation}</Text>
+            <Text testID="mood-match-situation" style={[styles.sitText, { color: colors.onKid }]}>{current.situation}</Text>
             <Text style={{ color: colors.onKid, marginTop: spacing.md, opacity: 0.9 }}>How would you feel?</Text>
           </View>
           <View style={styles.grid}>
             {options.map((f) => {
               const isPicked = picked === f.name;
-              const correct = picked && f.name === round.answer;
+              const correct = picked && f.name === current.answer;
               const bg = correct ? colors.success : isPicked ? colors.error : colors[f.color];
               const fg = colors.onKid;
               return (
@@ -106,3 +129,4 @@ const styles = StyleSheet.create({
   option: { width: "47%", height: 110, borderRadius: radius.lg, alignItems: "center", justifyContent: "center", borderWidth: 4 },
   optText: { fontSize: 16, fontWeight: "800", marginTop: spacing.sm },
 });
+

@@ -18,8 +18,11 @@ const GAMES: { id: string; title: string; desc: string; icon: string; from: K; t
   { id: "memory-cards", title: "Memory Cards", desc: "Flip and match emotions", icon: "copy", from: "kidOrange", to: "kidSun" },
   { id: "kindness-quest", title: "Kindness Quest", desc: "Be kind, earn stars", icon: "heart", from: "kidBerry", to: "kidCoral" },
   { id: "story-builder", title: "Story Builder", desc: "Build feeling stories", icon: "book", from: "kidSky", to: "kidBerry" },
-  { id: "scenario-sense", title: "Scenario Sense", desc: "Advanced: name tricky feelings", icon: "bulb", from: "kidBerry", to: "kidPink", isNew: true, isPremium: true },
-  { id: "empathy-challenge", title: "Empathy Challenge", desc: "Advanced: pick the kindest choice", icon: "people-circle", from: "kidLime", to: "kidSky", isNew: true, isPremium: true },
+  { id: "scenario-sense", title: "Scenario Sense", desc: "Advanced: name tricky feelings", icon: "bulb", from: "kidBerry", to: "kidPink", isPremium: true },
+  { id: "empathy-challenge", title: "Empathy Challenge", desc: "Advanced: pick the kindest choice", icon: "people-circle", from: "kidLime", to: "kidSky", isPremium: true },
+  { id: "face-the-feeling", title: "Face the Feeling", desc: "Match the word to the face", icon: "happy", from: "kidPink", to: "kidMint", isNew: true },
+  { id: "gratitude-garden", title: "Gratitude Garden", desc: "Plant things you're thankful for", icon: "flower", from: "kidLime", to: "kidSun", isNew: true },
+  { id: "worry-buster", title: "Worry Buster", desc: "Advanced: beat your worries", icon: "cloud", from: "kidMint", to: "kidSky", isNew: true, isPremium: true },
 ];
 
 const RAINBOW: K[] = ["kidCoral", "kidOrange", "kidSun", "kidLime", "kidSky", "kidPink"];
