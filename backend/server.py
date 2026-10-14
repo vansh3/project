@@ -238,7 +238,7 @@ async def startup():
         await db.users.insert_one({
             "user_id": f"user_{uuid.uuid4().hex[:12]}",
             "email": ADMIN_EMAIL,
-            "name": "Admin",
+            "name": "Richa Madan",
             "role": "admin",
             "premium": True,
             "password_hash": hash_password(ADMIN_PASSWORD),
@@ -246,6 +246,9 @@ async def startup():
             "created_at": datetime.now(timezone.utc),
         })
         logger.info(f"Seeded admin: {ADMIN_EMAIL}")
+    elif existing.get("name") != "Richa Madan":
+        await db.users.update_one({"email": ADMIN_EMAIL}, {"$set": {"name": "Richa Madan"}})
+        logger.info(f"Updated admin display name for: {ADMIN_EMAIL}")
 
     # Seed demo videos if none
     count = await db.videos.count_documents({})

@@ -72,12 +72,28 @@ export default function Home() {
         </Pressable>
       )}
 
+      {/* Meet the coach */}
+      <Pressable
+        testID="home-about-coach-banner"
+        onPress={() => router.push("/about")}
+        style={[styles.coachBanner, { backgroundColor: colors.surfaceSecondary, borderColor: colors.border, marginHorizontal: spacing.xl }]}
+      >
+        <View style={[styles.coachAvatar, { backgroundColor: colors.surfaceTertiary }]}>
+          <Ionicons name="person" size={26} color={colors.muted} />
+        </View>
+        <View style={{ flex: 1, marginLeft: spacing.md }}>
+          <Text style={[styles.coachName, { color: colors.onSurface }]}>Guided by Richa Madan</Text>
+          <Text style={[styles.coachRole, { color: colors.onSurfaceTertiary }]}>Certified Kids&apos; Emotion Coach</Text>
+        </View>
+        <Ionicons name="chevron-forward" size={20} color={colors.muted} />
+      </Pressable>
+
       {/* Quick actions */}
       <View style={[styles.quickRow, { paddingHorizontal: spacing.xl }]}>
         <Pressable testID="home-games-shortcut" onPress={() => router.push("/(tabs)/games")} style={[styles.quickCard, { backgroundColor: colors.brandPrimary }]}>
           <Ionicons name="game-controller" size={32} color={colors.onBrandPrimary} />
           <Text style={[styles.quickTitle, { color: colors.onBrandPrimary }]}>Kids Games</Text>
-          <Text style={[styles.quickSub, { color: colors.onBrandPrimary }]}>5 fun activities</Text>
+          <Text style={[styles.quickSub, { color: colors.onBrandPrimary }]}>9 fun activities</Text>
         </Pressable>
         <Pressable testID="home-videos-shortcut" onPress={() => router.push("/(tabs)/videos")} style={[styles.quickCard, { backgroundColor: colors.brandTertiary }]}>
           <Ionicons name="videocam" size={32} color={colors.onBrandTertiary} />
@@ -127,6 +143,10 @@ const styles = StyleSheet.create({
   featuredTag: { color: "#FFFFFF", fontSize: 12, fontWeight: "700", opacity: 0.9, letterSpacing: 1, textTransform: "uppercase" },
   featuredTitle: { color: "#FFFFFF", fontSize: 22, fontWeight: "800", marginTop: 4 },
   playBtn: { position: "absolute", right: spacing.lg, bottom: spacing.lg, width: 52, height: 52, borderRadius: 26, alignItems: "center", justifyContent: "center" },
+  coachBanner: { flexDirection: "row", alignItems: "center", borderRadius: radius.lg, borderWidth: 1, padding: spacing.md, marginBottom: spacing.xl },
+  coachAvatar: { width: 48, height: 48, borderRadius: 24, alignItems: "center", justifyContent: "center" },
+  coachName: { fontSize: 15, fontWeight: "800" },
+  coachRole: { fontSize: 12, marginTop: 2 },
   quickRow: { flexDirection: "row", gap: spacing.md, marginBottom: spacing.xl },
   quickCard: { flex: 1, borderRadius: radius.lg, padding: spacing.lg, minHeight: 120, justifyContent: "space-between" },
   quickTitle: { fontSize: 18, fontWeight: "800", marginTop: spacing.sm },

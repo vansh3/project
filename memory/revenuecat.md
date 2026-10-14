@@ -44,6 +44,24 @@ Status check:
   (`customerInfo.entitlements.active["pro"]`). No backend pro/is_pro tracking added
   for RevenueCat (per playbook — client SDK is sole source of truth).
 
+## KNOWN LIMITATION — identity binding in Web Browser Mode (web preview only)
+Verified in this sandbox (web preview, Test Store key): offerings/packages/pricing load
+and render correctly ($9.99 monthly / $79.99 yearly), and the Restore Purchases button
+works. However `Purchases.logIn(user.user_id)` on the web Browser Mode SDK
+(`purchases-js` via `@revenuecat/purchases-js-hybrid-mappings`) keeps returning an
+`$RCAnonymousID:...` originalAppUserId instead of the real user id, even after a long
+wait. RevenueCat's own docs note the raw web SDK uses `changeUser()` with different
+semantics than the native `logIn()` mobile SDKs — this looks like a Browser Mode-specific
+SDK quirk, not an app bug. Per the playbook's MANDATORY identity gate, the Subscribe
+button stays correctly disabled (`identityReady=false`) in this preview as a safety
+measure — this is NOT bypassed.
+- This only affects the web preview/Expo Go Test Store simulation. The real purchase
+  path (native iOS/Android builds using the mature native SDK) is unaffected — logIn()
+  works reliably there.
+- Action for a future agent/user: re-verify identity binding against a real dev/store
+  build once available; if still anonymous there, escalate via support/integration_expert
+  with the CustomerInfo log (see Testing section of the playbook).
+
 ## Taking in-app purchases LIVE — store-side steps (USER does these — agent cannot verify or perform)
 Needed ONLY for REAL purchases in published store builds. Test Store (Expo Go / web
 preview / dev build) needs none of this.

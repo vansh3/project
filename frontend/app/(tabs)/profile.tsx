@@ -72,6 +72,16 @@ export default function Profile() {
         </Pressable>
       )}
 
+      <Pressable
+        testID="profile-about-button"
+        onPress={() => router.push("/about")}
+        style={[styles.menuItem, { backgroundColor: colors.surfaceSecondary, borderColor: colors.border }]}
+      >
+        <Ionicons name="ribbon" size={22} color={colors.brandPrimary} />
+        <Text style={[styles.menuText, { color: colors.onSurface }]}>About the Coach</Text>
+        <Ionicons name="chevron-forward" size={20} color={colors.muted} />
+      </Pressable>
+
       <View style={{ height: spacing.xl }} />
       <Button title="Sign Out" variant="secondary" onPress={signOut} testID="profile-signout-button" />
     </ScrollView>
