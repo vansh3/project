@@ -1,0 +1,195 @@
+{
+  "app_name": "EmotiCoach Kids",
+  "personality": "4 Tactile / Playful LIGHT",
+  "personality_one_liner": "A warm, trustworthy safe space for parents, and a playful, chunky, colorful playground for kids.",
+  "color": {
+    "surface": "#FDFBF7",
+    "onSurface": "#264653",
+    "surfaceSecondary": "#FFFFFF",
+    "onSurfaceSecondary": "#264653",
+    "surfaceTertiary": "#F2ECE4",
+    "onSurfaceTertiary": "#4A6572",
+    "surfaceInverse": "#2A9D8F",
+    "onSurfaceInverse": "#FFFFFF",
+    "brand": "#F4A261",
+    "onBrand": "#FFFFFF",
+    "brandPrimary": "#E76F51",
+    "onBrandPrimary": "#FFFFFF",
+    "brandSecondary": "#E9C46A",
+    "onBrandSecondary": "#264653",
+    "brandTertiary": "#2A9D8F",
+    "onBrandTertiary": "#FFFFFF",
+    "success": "#2A9D8F",
+    "onSuccess": "#FFFFFF",
+    "warning": "#E9C46A",
+    "onWarning": "#264653",
+    "error": "#E76F51",
+    "onError": "#FFFFFF",
+    "info": "#4A6572",
+    "onInfo": "#FFFFFF",
+    "border": "#E8E2D9",
+    "borderStrong": "#D4C9BA",
+    "divider": "#E8E2D9",
+    "muted": "#8A9A9E"
+  },
+  "typography": {
+    "displayFontFamily": "Fredoka",
+    "textFontFamily": "Nunito",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Generous touch targets for kids (min 56pt), calm breathing room for parents. Consistent margins.",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 8,
+    "md": 16,
+    "lg": 24,
+    "pill": 999
+  },
+  "shadow_tier": "2",
+  "navigation": "bottom_tabs",
+  "icon_set": "Phosphor",
+  "glassmorphism": {
+    "enabled": "true",
+    "do's": [
+      "Bottom tab bar",
+      "Sticky headers over scrolling content",
+      "Floating action buttons (Admin upload)",
+      "Featured video cards (scrim)"
+    ],
+    "dont's": [
+      "Dense form fields",
+      "Body text regions",
+      "Kids interactive game grid cards (keep them solid and chunky)"
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-glass-effect",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "Onboarding & Auth",
+      "purpose": "Guide parents through account creation and explain the dual-mode nature of the app.",
+      "states": {
+        "loading": "Spinner in BrandPrimary color.",
+        "empty": "N/A",
+        "error": "Toast with readable message and Retry."
+      },
+      "layout": "Large hero illustration (parent & child), clear value proposition in Fredoka. Google Login and Email buttons stacked at the bottom (thumb zone). Generous spacing, warm background (surface)."
+    },
+    {
+      "name": "Profile Switcher",
+      "purpose": "Allow users to enter Parent Mode or Kid Mode securely.",
+      "states": {
+        "loading": "Centered spinner.",
+        "empty": "N/A",
+        "error": "Error loading profiles."
+      },
+      "layout": "Two massive, touchable cards filling the horizontal space with space-between. Left card: 'Parent' with calm icon. Right card: 'Kid' with 3D cute face mascot. Chunky borders, shadow 2."
+    },
+    {
+      "name": "Parent Home Feed",
+      "purpose": "Display daily emotional guidance videos for parents.",
+      "states": {
+        "loading": "Skeleton placeholders for video cards.",
+        "empty": "Illustration of a calm plant + 'No new videos today. Check back tomorrow!'",
+        "error": "Could not load feed. Retry."
+      },
+      "layout": "Single column vertical scroll. Video cards at 100% width minus padding. Each card has a cover image (parent talking with child), vertical gradient scrim, title, and play icon. Glass header pinned at top."
+    },
+    {
+      "name": "Kids Games Hub",
+      "purpose": "Interactive portal for kids to access their 5 emotional learning games.",
+      "states": {
+        "loading": "Bouncing mascot animation.",
+        "empty": "N/A",
+        "error": "Could not load games."
+      },
+      "layout": "Playful, controlled asymmetry. 2-col grid wrapping games (Mood Match, Calm Breathing, Story Builder, Kindness Quest, Emotion Memory Cards). Vivid, saturated card backgrounds using BrandSecondary and BrandTertiary. Oversized game icons, rounded pill shapes."
+    },
+    {
+      "name": "Video Player & Paywall",
+      "purpose": "Play emotional guidance content and lock premium ones behind Razorpay.",
+      "states": {
+        "loading": "Video buffer spinner.",
+        "empty": "N/A",
+        "error": "Failed to load video."
+      },
+      "layout": "Video fills top half. Bottom half has description, related videos. If premium: Blur overlay on bottom half with 'Unlock Premium' CTA sticky at bottom. Trust-building typography."
+    },
+    {
+      "name": "Admin Dashboard",
+      "purpose": "Allow admins to securely upload new guidance videos via URL or file.",
+      "states": {
+        "loading": "Spinner.",
+        "empty": "No videos uploaded yet. Tap '+' to start.",
+        "error": "Failed to load admin data."
+      },
+      "layout": "Utilitarian but friendly. List of uploaded videos with status chips. Fixed FAB (glass over BrandPrimary) in bottom right to open upload sheet. Forms use labels above inputs."
+    }
+  ],
+  "images": {
+    "auth_hero": {
+      "url": "https://images.unsplash.com/photo-1758687126048-4790d3d7e4ea?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTV8MHwxfHNlYXJjaHwyfHxwYXJlbnQlMjB0YWxraW5nJTIwd2l0aCUyMGNoaWxkJTIwaGFwcHl8ZW58MHx8fHwxNzkxOTgzNDQyfDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Father and son looking at each other happily on the floor"
+    },
+    "parent_video_thumbnail": {
+      "url": "https://images.unsplash.com/photo-1758612897934-a56dbd09a39e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTV8MHwxfHNlYXJjaHw0fHxwYXJlbnQlMjB0YWxraW5nJTIwd2l0aCUyMGNoaWxkJTIwaGFwcHl8ZW58MHx8fHwxNzkxOTgzNDQyfDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Grandfather and grandson lying on the floor talking"
+    },
+    "kids_memory_game_card": {
+      "url": "https://images.unsplash.com/photo-1721930878634-41c6f5f0746f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w8NjAzNDR8MHwxfHNlYXJjaHwzfHxraWRzJTIwcGxheWluZyUyMGludGVyYWN0aXZlJTIwbWVtb3J5JTIwZ2FtZXxlbnwwfHx8fDE3OTE5ODM0NDJ8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "Group of children playing a card game"
+    },
+    "kids_breathing_card": {
+      "url": "https://images.unsplash.com/photo-1769095207794-02ffab1e2376?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwxfHxjaGlsZCUyMGRvaW5nJTIwZGVlcCUyMGJyZWF0aGluZyUyMGNhbG18ZW58MHx8fHwxNzkxOTgzNDQyfDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Young girl meditating calmly"
+    },
+    "kid_profile_mascot": {
+      "url": "https://images.unsplash.com/photo-1707396174323-dd31d3dd4a97?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODR8MHwxfHNlYXJjaHwxfHxraWRzJTIwZW1vdGlvbmFsJTIwZmFjZSUyMGhhcHB5JTIwY3V0ZSUyMDNkfGVufDB8fHx8MTc5MTk4MzQ0OHww&ixlib=rb-4.1.0&q=85",
+      "alt": "Cute 3D emotional face for kids mode"
+    },
+    "google_logo": {
+      "url": "https://images.unsplash.com/photo-1662947190722-5d272f82a526?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NDh8MHwxfHNlYXJjaHwxfHxnb29nbGUlMjBsb2dvJTIwcG5nfGVufDB8fHx8MTc5MTk4MzQ1M3ww&ixlib=rb-4.1.0&q=85",
+      "alt": "Google logo in colorful 3D letters"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Implement a split-mode navigation structure (ParentNav vs KidNav) activated after login. A multi-child account switcher or parent gate should separate them.",
+    "Parent Mode must feel trustworthy, spacious, and analytical. Use Nunito primarily. Focus on calm colors (Mint, Sand, Oat).",
+    "Kid Mode must feel highly engaging, chunky, and tactile. Use Fredoka. Emphasize large touch targets, saturated accents (BrandPrimary, BrandSecondary), and 3D/Illustration visual weight.",
+    "Paywall must sit in the Parent domain. Ensure the Razorpay integration looks secure, utilizing clear typography and subtle glassmorphism to blur locked video content.",
+    "On video cards with text over images, absolutely mandate a vertical gradient scrim (transparent to ≥70% surfaceInverse) to guarantee WCAG AA readability for overlaid text.",
+    "Ensure strict adherence to safe area contexts and keyboard-avoiding views, especially in the Admin dashboard form and Onboarding screens.",
+    "No emojis anywhere in the system UI. Use Phosphor icons consistently.",
+    "No indigo, purple, or navy blues. Rely on the defined warm Terracotta, Oat, Mint, and Charcoal palette."
+  ],
+  "haptics": {
+    "primary_button_press": "medium",
+    "tab_switch": "light",
+    "game_interaction": "heavy",
+    "kid_reward_badge": "success"
+  }
+}

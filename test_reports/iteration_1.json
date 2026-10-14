@@ -1,0 +1,42 @@
+{
+  "summary": "First test run of EmotiCoach Kids. Backend: 23/23 pytest cases pass (auth signup/login/me/invalid, videos list/get with premium gating + locked flag, admin create/delete 403 for users, upload+download via object storage incl. ?token= and Bearer, games progress upsert+read, Razorpay unconfigured returns expected 500). Frontend: admin login works, all 4 tabs navigate (Home/Videos/Kids/Profile), all 5 game cards (mood-match/calm-breathing/memory-cards/kindness-quest/story-builder) load without errors, admin dashboard reachable via Profile->Admin Dashboard and Home admin chip, FAB opens /admin/upload, publishing a video via URL works (video appears in list), 2-tap delete confirm (icon -> 'Delete?') works and removes the video, signup creates a new free user, free user tapping premium video correctly navigates to /paywall which renders the Razorpay subscription CTA. Sign out returns to /login. Deprecated packages (expo-av etc.): none found. One frontend bug: when /admin/upload is deep-linked (no history), Publish succeeds on backend but router.back() throws 'GO_BACK not handled' and leaves user stranded on upload form (works fine via normal nav).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "app/admin/upload.tsx", "issue": "After successful Publish, code calls router.back() unconditionally. When user deep-links to /admin/upload (empty nav stack) this logs 'The action GO_BACK was not handled by any navigator' and leaves user on the form though the video is already created on the backend. Use router.replace('/admin') as fallback (router.canGoBack() check).", "testID": "upload-submit-button", "priority": "MEDIUM"},
+      {"component": "app/login.tsx + app/signup.tsx", "issue": "Email and password TextInputs on /login have no testID attributes (login works via placeholder, but tests had to fall back). Add testID='login-email-input', 'login-password-input', 'login-submit-button'. Signup already has signup-* testIDs - follow same convention for login.", "testID": "missing", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "global", "issues": ["Console warnings: 'shadow* style props deprecated, use boxShadow' and 'Image: style.resizeMode is deprecated, use props.resizeMode' appear on every screen. Not functional bugs but should be cleaned up."]}
+    ],
+    "react_native_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Fix /admin/upload post-publish navigation: replace router.back() with `if (router.canGoBack()) router.back(); else router.replace('/admin')` so deep links work.",
+    "Add testID attributes to login screen inputs/button (login-email-input, login-password-input, login-submit-button) for parity with signup-* testIDs.",
+    "Optional: clean up deprecated style warnings (shadow* -> boxShadow, Image style.resizeMode -> props.resizeMode) across components to silence console noise."
+  ],
+  "critical_code_review_comments": [
+    "server.py line 327: `name = data_j.get('name') or email.split('@')[0] if email else 'User'` — operator precedence makes this `data_j.get('name') or (email.split('@')[0] if email else 'User')`, so if `name` is None and `email` is None it will crash on split. Safe today because /auth/session validates `email` right after, but tighten with parentheses.",
+    "server.py line 400: unused `backend = os.environ.get('EXPO_PACKAGER_PROXY_URL', '')` in get_video — dead code, remove.",
+    "server.py: /api/payments/subscription returns HTTP 500 for the expected 'Razorpay not configured' / 'Plan not configured' case. 503 Service Unavailable or 501 Not Implemented would be more semantically correct and avoid false alarms in monitoring.",
+    "server.py line 437: `file.filename` can be None per Starlette; add a guard before `.rsplit`.",
+    "No file-size limit on POST /api/upload — a malicious admin can OOM the server (reads entire file into memory with `await file.read()`). Enforce max size and stream via file.read(chunk).",
+    "server.py: no rate limiting on /auth/login — brute-force protection missing.",
+    "server.py uses `@app.on_event('startup')` which is deprecated in FastAPI 0.110+. Prefer the new lifespan context manager."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "~92% (one post-publish navigation bug on deep-linked upload page)"},
+  "seed_data_creation": "Pytest creates one fresh TEST_user_*@example.com per session via /api/auth/signup (not cleaned up — low volume). Admin seeded by backend startup. UI tests created and deleted TEST_UI_Video / TEST_UI_Video_2 / TEST_UI_Video_3 (all cleaned up).",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend URL: https://feelings-friends-1.preview.emergentagent.com (from frontend/.env EXPO_PUBLIC_BACKEND_URL). Admin creds: admin@emoticoach.app / Admin@123. Login screen uses placeholder-only inputs ('you@example.com' and '••••••••'); other screens use testID. Delete flow is 2-tap: first tap on admin-delete-{id} switches that same button to a red 'Delete?' label, second tap on the 'Delete?' text (or the same testID) confirms. Razorpay keys intentionally empty — /api/payments/subscription returning 500 with 'Razorpay not configured' is the expected pending state.",
+  "rca_of_issue": "Post-publish navigation bug: /app/frontend/app/admin/upload.tsx calls router.back() after Publish. When user navigates Profile -> Admin -> FAB, the stack has history so back() returns to /admin and the new video shows. When /admin/upload is deep-linked (e.g., via Playwright page.goto, cold-start on a shared link, or deep-link intents), the stack is empty, Expo Router logs 'GO_BACK not handled' and the user stays on the form (video is actually created server-side — verified by GET /api/videos). Mitigation: use `router.canGoBack() ? router.back() : router.replace('/admin')`."
+}
