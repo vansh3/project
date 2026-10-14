@@ -14,7 +14,15 @@ function embedUrl(url: string): string | null {
 
 function NativeVideo({ uri }: { uri: string }) {
   const player = useVideoPlayer(uri, (p) => { p.loop = false; });
-  return <VideoView testID="video-player" player={player} style={StyleSheet.absoluteFill} nativeControls contentFit="contain" />;
+  return (
+    <VideoView
+      testID="video-player"
+      player={player}
+      style={[StyleSheet.absoluteFill, styles.fill]}
+      nativeControls
+      contentFit="contain"
+    />
+  );
 }
 
 export function VideoPlayer({ url }: { url: string }) {
@@ -30,7 +38,7 @@ export function VideoPlayer({ url }: { url: string }) {
       );
     }
     return (
-      <View testID="video-embed" style={StyleSheet.absoluteFill}>
+      <View testID="video-embed" style={[StyleSheet.absoluteFill, styles.fill]}>
         <WebView source={{ uri: embed }} allowsFullscreenVideo allowsInlineMediaPlayback mediaPlaybackRequiresUserAction={false} style={{ flex: 1, backgroundColor: "#000" }} />
       </View>
     );
@@ -38,4 +46,10 @@ export function VideoPlayer({ url }: { url: string }) {
   return <NativeVideo uri={url} />;
 }
 
-const styles = StyleSheet.create({ center: { alignItems: "center", justifyContent: "center" } });
+const styles = StyleSheet.create({
+  center: { alignItems: "center", justifyContent: "center" },
+  // expo-video renders a raw <video> tag on web; absoluteFill alone (position+inset)
+  // does NOT stretch replaced elements like <video>/<img> there — explicit
+  // width/height are required or it collapses to its tiny intrinsic size.
+  fill: { width: "100%", height: "100%" },
+});

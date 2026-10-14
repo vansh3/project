@@ -11,6 +11,7 @@ import { useTheme, spacing, radius, ThemeColors } from "@/src/theme";
 import { Button } from "@/src/components/Button";
 import { saveProgress } from "@/src/progress";
 import { useAuth } from "@/src/auth";
+import { GameMedal } from "@/src/components/GameMedal";
 
 type K = keyof ThemeColors;
 
@@ -151,8 +152,7 @@ export default function ScenarioSense() {
       <GameHeader title="Scenario Sense" score={score} color={colors.kidBerry} />
       {done ? (
         <View style={[styles.center, { paddingBottom: insets.bottom + spacing.xl }]}>
-          <Ionicons name="bulb" size={72} color={colors.kidSun} />
-          <Text testID="scenario-result" style={[styles.big, { color: colors.onSurface }]}>Feelings Expert!</Text>
+          <GameMedal title="Feelings Expert!" />
           <Text style={{ color: colors.onSurfaceTertiary, fontSize: 16 }}>You identified {score} of {SCENARIOS.length} feelings correctly</Text>
           <View style={{ width: "100%", marginTop: spacing.xl }}>
             <Button testID="scenario-replay" title="Play Again" onPress={replay} />

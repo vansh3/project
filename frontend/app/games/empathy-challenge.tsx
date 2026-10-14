@@ -11,6 +11,7 @@ import { useTheme, spacing, radius } from "@/src/theme";
 import { Button } from "@/src/components/Button";
 import { saveProgress } from "@/src/progress";
 import { useAuth } from "@/src/auth";
+import { GameMedal } from "@/src/components/GameMedal";
 
 // Advanced empathy/decision game: kids weigh THREE responses to a social
 // situation, ranked by emotional intelligence rather than simple right/wrong.
@@ -131,11 +132,11 @@ export default function EmpathyChallenge() {
       <GameHeader title="Empathy Challenge" score={score} color={colors.kidLime} />
       {done ? (
         <View style={[styles.center, { paddingBottom: insets.bottom + spacing.xl }]}>
+          <GameMedal title="Empathy Champion!" />
           <View style={{ flexDirection: "row", gap: 4 }}>
-            {[0, 1, 2].map((k) => <Ionicons key={k} name={k < stars ? "star" : "star-outline"} size={40} color={colors.brandSecondary} />)}
+            {[0, 1, 2].map((k) => <Ionicons key={k} name={k < stars ? "star" : "star-outline"} size={32} color={colors.brandSecondary} />)}
           </View>
-          <Text testID="empathy-result" style={[styles.big, { color: colors.onSurface }]}>Empathy Champion!</Text>
-          <Text style={{ color: colors.onSurfaceTertiary, fontSize: 16, textAlign: "center" }}>You scored {score} of {total} kindness points</Text>
+          <Text style={{ color: colors.onSurfaceTertiary, fontSize: 16, textAlign: "center", marginTop: spacing.sm }}>You scored {score} of {total} kindness points</Text>
           <View style={{ width: "100%", marginTop: spacing.xl }}>
             <Button testID="empathy-replay" title="Play Again" onPress={replay} />
           </View>

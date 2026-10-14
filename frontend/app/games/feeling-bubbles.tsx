@@ -9,6 +9,7 @@ import { GameHeader } from "@/src/components/GameHeader";
 import { useTheme, spacing, radius, ThemeColors } from "@/src/theme";
 import { Button } from "@/src/components/Button";
 import { saveProgress } from "@/src/progress";
+import { GameMedal } from "@/src/components/GameMedal";
 
 type K = keyof ThemeColors;
 const TARGETS: { feeling: string; color: K }[] = [
@@ -123,9 +124,8 @@ export default function FeelingBubbles() {
           <View style={styles.overlay}>
             {state === "done" ? (
               <>
-                <Ionicons name="trophy" size={80} color={colors.kidSun} />
+                <GameMedal title="Super bubble popper!" />
                 <Text testID="bubbles-result" style={[styles.big, { color: colors.onSurface }]}>{score} pops!</Text>
-                <Text style={{ color: colors.onSurfaceTertiary, fontSize: 16 }}>Super bubble popper!</Text>
               </>
             ) : (
               <>

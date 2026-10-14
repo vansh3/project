@@ -9,6 +9,7 @@ import { GameHeader } from "@/src/components/GameHeader";
 import { useTheme, spacing, radius, ThemeColors } from "@/src/theme";
 import { Button } from "@/src/components/Button";
 import { saveProgress } from "@/src/progress";
+import { GameMedal } from "@/src/components/GameMedal";
 
 type K = keyof ThemeColors;
 // Each feeling has a color, like a feelings color wheel
@@ -58,13 +59,13 @@ export default function ColorMood() {
       <GameHeader title="Color My Mood" score={score} color={colors.kidPink} />
       {done ? (
         <View style={[styles.center, { paddingBottom: insets.bottom + spacing.xl }]}>
+          <GameMedal title="You painted a rainbow of feelings!" />
           <View style={styles.paletteRow}>
             {FEELINGS.map((f, k) => (
               <Animated.View key={f.name} entering={BounceIn.delay(k * 100)} style={[styles.paint, { backgroundColor: colors[f.color] }]} />
             ))}
           </View>
           <Text testID="color-mood-result" style={[styles.big, { color: colors.onSurface }]}>{score} / {rounds.length}</Text>
-          <Text style={{ color: colors.onSurfaceTertiary, fontSize: 16, textAlign: "center" }}>You painted a rainbow of feelings!</Text>
           <View style={{ width: "100%", marginTop: spacing.xl }}>
             <Button testID="color-mood-replay" title="Paint Again" onPress={replay} />
           </View>

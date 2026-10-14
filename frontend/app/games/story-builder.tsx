@@ -7,6 +7,7 @@ import { GameHeader } from "@/src/components/GameHeader";
 import { useTheme, spacing, radius } from "@/src/theme";
 import { Button } from "@/src/components/Button";
 import { saveProgress } from "@/src/progress";
+import { GameMedal } from "@/src/components/GameMedal";
 
 const STEPS = [
   { label: "Who is in the story?", options: ["a little bunny", "a brave girl", "a sleepy bear", "a tiny robot"] },
@@ -39,6 +40,7 @@ export default function StoryBuilder() {
       <ScrollView contentContainerStyle={{ padding: spacing.xl, paddingBottom: insets.bottom + spacing.xl }}>
         {done ? (
           <>
+            <GameMedal title="Story Complete!" />
             <View style={[styles.storyBox, { backgroundColor: colors.kidSun }]}>
               <Text style={[styles.storyLabel, { color: colors.onKidLight }]}>Your Story</Text>
               <Text testID="story-result" style={[styles.storyText, { color: colors.onKidLight }]}>{story}</Text>

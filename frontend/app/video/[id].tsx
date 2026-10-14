@@ -61,7 +61,7 @@ export default function VideoScreen() {
 }
 
 const styles = StyleSheet.create({
-  playerBox: { width: "100%", aspectRatio: 16 / 9, backgroundColor: "#000" },
+  playerBox: { width: "100%", aspectRatio: 16 / 9, maxHeight: 320, backgroundColor: "#000" },
   back: { position: "absolute", left: spacing.lg, width: 40, height: 40, borderRadius: 20, backgroundColor: "rgba(0,0,0,0.5)", alignItems: "center", justifyContent: "center" },
   badge: { alignSelf: "flex-start", paddingHorizontal: 10, paddingVertical: 4, borderRadius: radius.pill, marginBottom: spacing.sm },
   title: { fontSize: 24, fontWeight: "800" },

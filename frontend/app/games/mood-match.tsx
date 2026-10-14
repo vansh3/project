@@ -5,6 +5,7 @@ import Ionicons from "@react-native-vector-icons/ionicons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { GameHeader } from "@/src/components/GameHeader";
+import { GameMedal } from "@/src/components/GameMedal";
 import { useTheme, spacing, radius } from "@/src/theme";
 import { Button } from "@/src/components/Button";
 import { saveProgress } from "@/src/progress";
@@ -55,7 +56,7 @@ export default function MoodMatch() {
       <GameHeader title="Mood Match" score={score} color={colors.kidCoral} />
       {done ? (
         <View style={[styles.center, { paddingBottom: insets.bottom + spacing.xl }]}>
-          <Ionicons name="trophy" size={96} color={colors.brandSecondary} />
+          <GameMedal />
           <Text testID="mood-match-result" style={[styles.big, { color: colors.onSurface }]}>{score} / {ROUNDS.length}</Text>
           <Text style={[styles.msg, { color: colors.onSurfaceTertiary }]}>Great job reading feelings!</Text>
           <View style={{ width: "100%", marginTop: spacing.xl }}>

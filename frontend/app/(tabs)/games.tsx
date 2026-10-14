@@ -49,7 +49,7 @@ export default function Games() {
         <Text style={[styles.title, { color: colors.onSurface }]}>Kids Zone</Text>
         <Text style={[styles.subtitle, { color: colors.onSurfaceTertiary }]}>Pick a colorful game to play!</Text>
       </View>
-      <ScrollView contentContainerStyle={{ paddingHorizontal: spacing.xl, paddingBottom: spacing.xl }} testID="games-screen">
+      <ScrollView contentContainerStyle={{ paddingHorizontal: spacing.xl, paddingBottom: insets.bottom + spacing["2xl"] }} testID="games-screen">
         <View style={styles.grid}>
           {GAMES.map((g, idx) => {
             const locked = !!g.isPremium && !canPlayPremium;

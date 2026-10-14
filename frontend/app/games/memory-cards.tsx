@@ -5,6 +5,7 @@ import Ionicons from "@react-native-vector-icons/ionicons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { GameHeader } from "@/src/components/GameHeader";
+import { GameMedal } from "@/src/components/GameMedal";
 import { useTheme, spacing, radius } from "@/src/theme";
 import { Button } from "@/src/components/Button";
 import { saveProgress } from "@/src/progress";
@@ -93,7 +94,8 @@ export default function MemoryCards() {
         </View>
         {won && (
           <View style={{ marginTop: spacing.xl, alignItems: "center" }}>
-            <Text testID="memory-win" style={{ fontSize: 24, fontWeight: "800", color: colors.onSurface }}>All matched in {moves} moves!</Text>
+            <GameMedal title="All matched!" />
+            <Text testID="memory-win" style={{ fontSize: 18, fontWeight: "700", color: colors.onSurfaceTertiary }}>in {moves} moves</Text>
           </View>
         )}
       </View>

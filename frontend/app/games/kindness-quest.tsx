@@ -8,6 +8,7 @@ import { GameHeader } from "@/src/components/GameHeader";
 import { useTheme, spacing, radius } from "@/src/theme";
 import { Button } from "@/src/components/Button";
 import { saveProgress } from "@/src/progress";
+import { GameMedal } from "@/src/components/GameMedal";
 
 const QUESTS = [
   { q: "A classmate is sitting alone at lunch.", options: ["Ask them to join you", "Ignore them", "Laugh at them"], good: 0 },
@@ -45,11 +46,11 @@ export default function KindnessQuest() {
       <GameHeader title="Kindness Quest" score={stars} color={colors.kidBerry} />
       {done ? (
         <View style={[styles.center, { paddingBottom: insets.bottom + spacing.xl }]}>
-          <View style={{ flexDirection: "row", gap: 4 }}>
-            {QUESTS.map((_, k) => <Ionicons key={k} name={k < stars ? "star" : "star-outline"} size={40} color={colors.brandSecondary} />)}
+          <GameMedal title="Kindness Hero!" />
+          <View style={{ flexDirection: "row", gap: 4, marginTop: spacing.sm }}>
+            {QUESTS.map((_, k) => <Ionicons key={k} name={k < stars ? "star" : "star-outline"} size={32} color={colors.brandSecondary} />)}
           </View>
-          <Text testID="kindness-result" style={[styles.big, { color: colors.onSurface }]}>Kindness Hero!</Text>
-          <Text style={{ color: colors.onSurfaceTertiary, fontSize: 16 }}>You earned {stars} stars</Text>
+          <Text style={{ color: colors.onSurfaceTertiary, fontSize: 16, marginTop: spacing.sm }}>You earned {stars} stars</Text>
           <View style={{ width: "100%", marginTop: spacing.xl }}>
             <Button testID="kindness-replay" title="Play Again" onPress={() => { setI(0); setStars(0); }} />
           </View>

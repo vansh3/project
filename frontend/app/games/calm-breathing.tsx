@@ -8,6 +8,7 @@ import { GameHeader } from "@/src/components/GameHeader";
 import { useTheme, spacing } from "@/src/theme";
 import { Button } from "@/src/components/Button";
 import { saveProgress } from "@/src/progress";
+import { GameMedal } from "@/src/components/GameMedal";
 
 const PHASES = [
   { label: "Breathe In", secs: 4, scale: 1.6 },
@@ -64,11 +65,13 @@ export default function CalmBreathing() {
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
       <GameHeader title="Calm Breathing" color={colors.kidMint} />
       <View style={styles.center}>
-        <Animated.View style={[styles.balloon, { backgroundColor: [colors.kidSky, colors.kidPink, colors.kidLime][phase] }, style]}>
-          <Text testID="breathing-count" style={[styles.count, { color: colors.onKid }]}>{running ? count : ""}</Text>
-        </Animated.View>
+        {finished ? <GameMedal title="You did it! Feel calm." /> : (
+          <Animated.View style={[styles.balloon, { backgroundColor: [colors.kidSky, colors.kidPink, colors.kidLime][phase] }, style]}>
+            <Text testID="breathing-count" style={[styles.count, { color: colors.onKid }]}>{running ? count : ""}</Text>
+          </Animated.View>
+        )}
         <Text testID="breathing-phase" style={[styles.phase, { color: colors.onSurface }]}>
-          {running ? PHASES[phase].label : finished ? "You did it! Feel calm." : "Ready to relax?"}
+          {running ? PHASES[phase].label : finished ? "" : "Ready to relax?"}
         </Text>
         <Text style={{ color: colors.muted, marginTop: spacing.sm }}>Cycle {Math.min(cycle + (running ? 1 : 0), TOTAL_CYCLES)} of {TOTAL_CYCLES}</Text>
       </View>
